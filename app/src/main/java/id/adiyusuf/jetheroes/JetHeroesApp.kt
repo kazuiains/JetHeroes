@@ -1,7 +1,13 @@
 package id.adiyusuf.jetheroes
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -31,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import id.adiyusuf.jetheroes.model.HeroesData
 import id.adiyusuf.jetheroes.ui.theme.JetHeroesTheme
+import kotlinx.coroutines.launch
 
 @Composable
 fun JetHeroesApp(modifier: Modifier = Modifier) {
@@ -39,7 +46,7 @@ fun JetHeroesApp(modifier: Modifier = Modifier) {
         val listState = rememberLazyListState()
         val showButton: Boolean by remember { derivedStateOf { listState.firstVisibleItemIndex > 0 } }
 
-        LazyColumn (state = listState) {
+        LazyColumn(state = listState, contentPadding = PaddingValues(bottom = 80.dp)) {
             items(HeroesData.heroes, key = { it.id }) { hero ->
                 HeroListItem(
                     name = hero.name,
@@ -47,6 +54,27 @@ fun JetHeroesApp(modifier: Modifier = Modifier) {
                     modifier = Modifier.fillMaxWidth()
                 )
             }
+        }
+
+        AnimatedVisibility(
+            visible = showButton,
+            enter = fadeIn() + slideInVertically(),
+            exit = fadeOut() + slideOutVertically(),
+            modifier = Modifier
+                .padding(bottom = 30.dp)
+                .align(Alignment.BottomCenter)
+        ) {
+            ScrollToTopButton(
+                onClick = {
+                    scope.launch {
+//                        non animation
+//                        listState.scrollToItem(index = 0)
+
+//                        animation
+                        listState.animateScrollToItem(index = 0)
+                    }
+                },
+            )
         }
     }
 }
