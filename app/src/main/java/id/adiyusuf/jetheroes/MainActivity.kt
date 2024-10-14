@@ -18,7 +18,7 @@ import id.adiyusuf.jetheroes.ui.theme.JetHeroesTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+//        enableEdgeToEdge() = for create content on top without padding
         setContent {
             JetHeroesTheme {
                 Surface(
